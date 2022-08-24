@@ -1,5 +1,7 @@
 <?php
 
+namespace Daver\MVC\Config;
+
 class Database
 {
   private static ?\PDO $pdo = null;
