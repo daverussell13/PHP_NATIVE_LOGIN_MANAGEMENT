@@ -28,4 +28,25 @@ class UserRepository
 
     return $user;
   }
+
+  public function findById(string $id): ?User
+  {
+    $statement = $this->connection->prepare(
+      "SELECT id, name, password FROM users WHERE id = ?"
+    );
+    $statement->execute([$id]);
+
+    try {
+      if (($result = $statement->fetch())) {
+        $user = new User();
+        $user->setId($result["id"])
+             ->setName($result["name"])
+             ->setPassword($result["password"]);
+        return $user;
+      }
+      else return null;
+    } finally {
+      $statement->closeCursor();
+    }
+  }
 }
