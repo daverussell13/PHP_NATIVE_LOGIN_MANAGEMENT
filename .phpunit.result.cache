@@ -1,0 +1,1 @@
+{"version":1,"defects":[],"times":{"Daver\\MVC\\Config\\DatabaseTest::testGetConnection":0.041,"Daver\\MVC\\Config\\DatabaseTest::testGetConnectionSingleton":0.001}}
