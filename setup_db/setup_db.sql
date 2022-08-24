@@ -31,4 +31,13 @@ CREATE TABLE sessions (
     CONSTRAINT fk_session_user FOREIGN KEY (user_id) REFERENCES users (id)
 ) ENGINE InnoDB;
 
+-- DB USER --
+CREATE USER "php-login-management"@"localhost";
+SET PASSWORD FOR "php-login-management"@"localhost" = "user";
+
+CREATE USER "php-login-management-test"@"localhost";
+SET PASSWORD FOR "php-login-management-test"@"localhost" = "test";
+
+GRANT SELECT, INSERT, UPDATE, DELETE on php_login_management.* to "php-login-management"@"localhost";
+GRANT SELECT, INSERT, UPDATE, DELETE on php_login_management_test.* to "php-login-management-test"@"localhost";
 
