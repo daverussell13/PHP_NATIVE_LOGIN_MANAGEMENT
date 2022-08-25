@@ -4,6 +4,8 @@ namespace Daver\MVC\Domain;
 
 class User
 {
+  public const MAX_PASS_LENGTH = 20;
+  public const MAX_NAME_LENGTH = 20;
   private string $id;
   private string $name;
   private string $password;
