@@ -20,4 +20,19 @@ class Database
     }
     return self::$pdo;
   }
+
+  public static function beginTransaction(): bool
+  {
+    return self::$pdo->beginTransaction();
+  }
+
+  public static function commitTransaction(): bool
+  {
+    return self::$pdo->commit();
+  }
+
+  public static function rollbackTransaction(): bool
+  {
+    return self::$pdo->rollBack();
+  }
 }
