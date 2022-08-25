@@ -23,7 +23,7 @@ class UserRepository
     $statement->execute([
       $user->getId(),
       $user->getName(),
-      $user->getPassword
+      $user->getPassword()
     ]);
 
     return $user;
@@ -48,5 +48,10 @@ class UserRepository
     } finally {
       $statement->closeCursor();
     }
+  }
+
+  public function deleteAll(): void
+  {
+    $this->connection->exec("DELETE FROM users");
   }
 }
