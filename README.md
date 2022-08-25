@@ -6,3 +6,8 @@ Design Pattern implemented in this project :
  - Service Pattern
  - Domain Model Pattern
  - Singleton
+ 
+ Tech Stack :
+ - PHP
+ - Bootstrap
+ - Composer
