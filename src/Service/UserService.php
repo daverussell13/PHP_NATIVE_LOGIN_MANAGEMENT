@@ -56,10 +56,10 @@ class UserService
     if (trim($request->id) == "" || trim($request->name) == "" || trim($request->password) == "")
       throw new ValidationException("Id, Name, Password Cannot Empty");
 
-    if ($request->name > User::MAX_NAME_LENGTH)
+    if (strlen($request->name) > User::MAX_NAME_LENGTH)
       throw new ValidationException("Name Cannot Exceed More Than " . User::MAX_NAME_LENGTH . " Characters");
 
-    if ($request->password > User::MAX_PASS_LENGTH)
+    if (strlen($request->password) > User::MAX_PASS_LENGTH)
       throw new ValidationException("Password Cannot Exceed More Than " . User::MAX_PASS_LENGTH . " Characters");
   }
 }
