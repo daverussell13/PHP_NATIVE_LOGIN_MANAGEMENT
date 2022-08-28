@@ -2,7 +2,7 @@
     <?php if(isset($model["error"])): ?>
       <div class="row">
         <div class="alert alert-danger" role="alert">
-          A simple primary alert—check it out!
+          <?= $model["error"]; ?>
         </div>
       </div>
     <?php endif ?>
