@@ -1,6 +1,7 @@
 <?php
 
 namespace Daver\MVC\Controllers;
+
 use Daver\MVC\App\View;
 use Daver\MVC\Models\UserRegisterRequest;
 use Daver\MVC\Service\UserService;
@@ -35,7 +36,7 @@ class UserController
 
     try {
       $this->userService->register($request);
-      // TODO: redirect to login page
+      header("Location: /users/login");
     }
     catch (ValidationException $exception) {
       View::render("User/register",[
@@ -43,5 +44,20 @@ class UserController
         "error" => $exception->errorMessage()
       ]);
     }
+  }
+
+  public function login(): void
+  {
+    View::render("User/login",[
+      "title" => "Login"
+    ]);
+  }
+
+  public function debugClear(): void
+  {
+    $connection = Database::getConnection();
+    $repository = new UserRepository($connection);
+    $repository->deleteAll();
+    header("Location: /");
   }
 }
