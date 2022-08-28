@@ -29,6 +29,7 @@
               class="form-control"
               id="id"
               placeholder="id"
+              value="<?= $_POST["id"] ?? "" ?>"
             />
             <label for="id">Id</label>
           </div>
@@ -39,6 +40,7 @@
               class="form-control"
               id="name"
               placeholder="name"
+              value="<?= $_POST["name"] ?? "" ?>"
             />
             <label for="name">Name</label>
           </div>

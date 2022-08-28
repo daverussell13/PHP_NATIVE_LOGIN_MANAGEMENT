@@ -10,4 +10,9 @@ class View
     require __DIR__ . "/../Views/" . $view . ".php";
     require __DIR__ . "/../Views/footer.php";
   }
+
+  public static function redirect(string $url): void
+  {
+    header("Location: " . $url);
+  }
 }

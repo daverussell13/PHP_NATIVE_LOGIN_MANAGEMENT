@@ -36,7 +36,7 @@ class UserController
 
     try {
       $this->userService->register($request);
-      header("Location: /users/login");
+      View::redirect("/users/login");
     }
     catch (ValidationException $exception) {
       View::render("User/register",[
@@ -58,6 +58,6 @@ class UserController
     $connection = Database::getConnection();
     $repository = new UserRepository($connection);
     $repository->deleteAll();
-    header("Location: /");
+    View::redirect("/");
   }
 }
