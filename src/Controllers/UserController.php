@@ -3,7 +3,10 @@
 namespace Daver\MVC\Controllers;
 
 use Daver\MVC\App\View;
-use Daver\MVC\Models\UserRegisterRequest;
+use Daver\MVC\Models\{
+  UserRegisterRequest,
+  UserLoginRequest
+};
 use Daver\MVC\Service\UserService;
 use Daver\MVC\Exception\ValidationException;
 use Daver\MVC\Config\Database;
@@ -51,6 +54,25 @@ class UserController
     View::render("User/login",[
       "title" => "Login"
     ]);
+  }
+
+  public function loginPost(): void
+  {
+    $request = new UserLoginRequest();
+    $request->id = $_POST["id"];
+    $request->password = $_POST["password"];
+
+    try {
+      $response = $this->userService->login($request);
+      View::redirect("/");
+    }
+    catch (ValidationException $exception)
+    {
+      View::render("User/login", [
+        "title" => "Login",
+        "error" => $exception->errorMessage()
+      ]);
+    }
   }
 
   public function debugClear(): void

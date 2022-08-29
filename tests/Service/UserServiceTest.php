@@ -87,7 +87,7 @@ class UserServiceTest extends TestCase
     $request = new UserLoginRequest();
 
     self::expectException(ValidationException::class);
-    self::expectExceptionMessage("Id, Name, Password Cannot Null");
+    self::expectExceptionMessage("Id, Password Cannot Null");
 
     $this->service->login($request);
 
@@ -95,7 +95,7 @@ class UserServiceTest extends TestCase
     $request->password = "";
 
     self::expectException(ValidationException::class);
-    self::expectExceptionMessage("Id, Name, Password Cannot Empty");
+    self::expectExceptionMessage("Id, Password Cannot Empty");
 
     $this->service->login($request);
   }

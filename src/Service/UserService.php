@@ -81,9 +81,9 @@ class UserService
   private function validateLoginRequest(UserLoginRequest $request): void
   {
     if ($request->id == null || $request->password == null)
-      throw new ValidationException("Id, Name, Password Cannot Null");
+      throw new ValidationException("Id, Password Cannot Null");
 
     if (trim($request->id) == "" || trim($request->password) == "")
-      throw new ValidationException("Id, Name, Password Cannot Empty");
+      throw new ValidationException("Id, Password Cannot Empty");
   }
 }
