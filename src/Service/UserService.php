@@ -5,6 +5,8 @@ namespace Daver\MVC\Service;
 use Daver\MVC\Models\{
   UserRegisterRequest,
   UserRegisterResponse,
+  UserLoginRequest,
+  UserLoginResponse
 };
 use Daver\MVC\Repository\UserRepository;
 use Daver\MVC\Exception\ValidationException;
@@ -61,5 +63,27 @@ class UserService
 
     if (strlen($request->password) > User::MAX_PASS_LENGTH)
       throw new ValidationException("Password Cannot Exceed More Than " . User::MAX_PASS_LENGTH . " Characters");
+  }
+
+  public function login(UserLoginRequest $request): UserLoginResponse
+  {
+    $this->validateLoginRequest($request);
+    $user = $this->userRepository->findById($request->id);
+
+    if(!$user || !password_verify($request->password, $user->getPassword()))
+      throw new ValidationException("Id or Password is wrong");
+
+    $response = new UserLoginResponse();
+    $response->user = $user;
+    return $response;
+  }
+
+  private function validateLoginRequest(UserLoginRequest $request): void
+  {
+    if ($request->id == null || $request->password == null)
+      throw new ValidationException("Id, Name, Password Cannot Null");
+
+    if (trim($request->id) == "" || trim($request->password) == "")
+      throw new ValidationException("Id, Name, Password Cannot Empty");
   }
 }
