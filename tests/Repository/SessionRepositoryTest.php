@@ -9,7 +9,8 @@ use Daver\MVC\Domain\User;
 
 class SessionRepositoryTest extends TestCase
 {
-  private SessionRepository $repository;
+  private SessionRepository $sessionRepository;
+  private UserRepository $userRepository;
 
   protected function setUp(): void
   {
@@ -18,13 +19,16 @@ class SessionRepositoryTest extends TestCase
          ->setName("test")
          ->setPassword(password_hash("test", PASSWORD_BCRYPT));
 
-    $this->repository = new SessionRepository(Database::getConnection());
-    $this->repository->deleteAll();
+    $this->sessionRepository = new SessionRepository(Database::getConnection());
+    $this->userRepository = new UserRepository(Database::getConnection());
 
-    $userRepository = new UserRepository(Database::getConnection());
-    $userRepository->deleteAll();
+    $this->userRepository->save($user);
+  }
 
-    $userRepository->save($user);
+  protected function tearDown(): void
+  {
+    $this->sessionRepository->deleteAll();
+    $this->userRepository->deleteAll();
   }
 
   public function testSave(): void
@@ -33,9 +37,9 @@ class SessionRepositoryTest extends TestCase
     $session->setId(uniqid())
             ->setUserId("test");
 
-    $this->repository->save($session);
+    $this->sessionRepository->save($session);
 
-    $result = $this->repository->findById($session->getId());
+    $result = $this->sessionRepository->findById($session->getId());
 
     self::assertEquals($result->getId(), $session->getId());
     self::assertEquals($result->getUserId(), $session->getUserId());
@@ -47,21 +51,21 @@ class SessionRepositoryTest extends TestCase
     $session->setId(uniqid())
             ->setUserId("test");
 
-    $this->repository->save($session);
-    $result = $this->repository->findById($session->getId());
+    $this->sessionRepository->save($session);
+    $result = $this->sessionRepository->findById($session->getId());
 
     self::assertEquals($result->getId(), $session->getId());
     self::assertEquals($result->getUserId(), $session->getUserId());
 
-    $this->repository->deleteById($session->getId());
+    $this->sessionRepository->deleteById($session->getId());
 
-    $result = $this->repository->findById($session->getId());
+    $result = $this->sessionRepository->findById($session->getId());
     self::assertNull($result);
   }
 
   public function testFindByIdNotFound(): void
   {
-    $result = $this->repository->findById("notfound");
+    $result = $this->sessionRepository->findById("notfound");
     self::assertNull($result);
   }
 }

@@ -10,9 +10,13 @@ class UserRepositoryTest extends TestCase
 {
   private UserRepository $repository;
 
-  public function setUp(): void
+  protected function setUp(): void
   {
     $this->repository = new UserRepository(Database::getConnection());
+  }
+
+  protected function tearDown(): void
+  {
     $this->repository->deleteAll();
   }
 

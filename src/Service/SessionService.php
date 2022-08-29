@@ -3,6 +3,7 @@
 namespace Daver\MVC\Service;
 
 use Daver\MVC\Repository\SessionRepository;
+use Daver\MVC\Repository\UserRepository;
 use Daver\MVC\Domain\{
   User,
   Session
@@ -47,6 +48,6 @@ class SessionService
     $session = $this->sessionRepository->findById($sessionId);
 
     if (!$session) return null;
-    return $this->userRepository->findById($session->getId());
+    return $this->userRepository->findById($session->getUserId());
   }
 }

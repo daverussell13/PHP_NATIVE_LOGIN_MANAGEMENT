@@ -23,8 +23,12 @@ namespace Daver\MVC\Controllers
     protected function setUp(): void
     {
       $this->userRepository = new UserRepository(Database::getConnection());
-      $this->userRepository->deleteAll();
       $this->controller = new UserController();
+    }
+
+    protected function tearDown(): void
+    {
+      $this->userRepository->deleteAll();
     }
 
     public function testRegister()

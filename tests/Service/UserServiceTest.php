@@ -11,20 +11,18 @@ use Daver\MVC\Models\UserLoginRequest;
 
 class UserServiceTest extends TestCase
 {
+  private UserRepository $userRepository;
   private UserService $service;
 
   protected function setUp(): void
   {
-    $connection = Database::getConnection();
-    $userRepository = new UserRepository($connection);
-    $this->service = new UserService($userRepository);
+    $this->userRepository = new UserRepository(Database::getConnection());
+    $this->service = new UserService($this->userRepository);
   }
 
   protected function tearDown(): void
   {
-    $connection = Database::getConnection();
-    $userRepository = new UserRepository($connection);
-    $userRepository->deleteAll();
+    $this->userRepository->deleteAll();
   }
 
   public function testRegisterSuccess(): void
