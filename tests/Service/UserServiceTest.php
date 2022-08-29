@@ -7,7 +7,7 @@ use Daver\MVC\Config\Database;
 use Daver\MVC\Repository\UserRepository;
 use Daver\MVC\Models\UserRegisterRequest;
 use Daver\MVC\Exception\ValidationException;
-use PHPUnit\Util\Xml\ValidationResult;
+use Daver\MVC\Models\UserLoginRequest;
 
 class UserServiceTest extends TestCase
 {
@@ -80,5 +80,61 @@ class UserServiceTest extends TestCase
     $requestNow->name = "test";
     $requestNow->password = "test";
     $this->service->register($requestNow);
+  }
+
+  public function testLoginFailed(): void
+  {
+    $request = new UserLoginRequest();
+
+    self::expectException(ValidationException::class);
+    self::expectExceptionMessage("Id, Name, Password Cannot Null");
+
+    $this->service->login($request);
+
+    $request->id = "";
+    $request->password = "";
+
+    self::expectException(ValidationException::class);
+    self::expectExceptionMessage("Id, Name, Password Cannot Empty");
+
+    $this->service->login($request);
+  }
+
+  public function testLoginWrongPassword(): void
+  {
+    $registerRequest = new UserRegisterRequest();
+    $registerRequest->id = "test";
+    $registerRequest->name = "test";
+    $registerRequest->password = "test";
+
+    $this->service->register($registerRequest);
+
+    $loginRequest = new UserLoginRequest();
+    $loginRequest->id = "test";
+    $loginRequest->password = "wrong password";
+
+    self::expectException(ValidationException::class);
+    self::expectExceptionMessage("Id or Password is wrong");
+    $this->service->login($loginRequest);
+  }
+
+  public function testLoginSuccess(): void
+  {
+    $registerRequest = new UserRegisterRequest();
+    $registerRequest->id = "test";
+    $registerRequest->name = "test";
+    $registerRequest->password = "test";
+
+    $this->service->register($registerRequest);
+
+    $loginRequest = new UserLoginRequest();
+    $loginRequest->id = "test";
+    $loginRequest->password = "test";
+
+    $response = $this->service->login($loginRequest);
+
+    self::assertEquals($registerRequest->id, $response->user->getId());
+    self::assertEquals($registerRequest->name, $response->user->getName());
+    self::assertTrue(password_verify($registerRequest->password, $response->user->getPassword()));
   }
 }
