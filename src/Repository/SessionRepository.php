@@ -9,9 +9,9 @@ class SessionRepository
 {
   private \PDO $connection;
 
-  public function __construct()
+  public function __construct(\PDO $connection)
   {
-    $this->connection = Database::getConnection();
+    $this->connection = $connection;
   }
 
   public function save(Session $session): Session
