@@ -12,6 +12,7 @@ namespace Daver\MVC\Controllers
 {
   use PHPUnit\Framework\TestCase;
   use Daver\MVC\Repository\UserRepository;
+  use Daver\MVC\Repository\SessionRepository;
   use Daver\MVC\Config\Database;
   use Daver\MVC\Domain\User;
 
@@ -19,15 +20,18 @@ namespace Daver\MVC\Controllers
   {
     private UserRepository $userRepository;
     private UserController $controller;
+    private SessionRepository $sessionRepository;
 
     protected function setUp(): void
     {
       $this->userRepository = new UserRepository(Database::getConnection());
+      $this->sessionRepository = new SessionRepository(Database::getConnection());
       $this->controller = new UserController();
     }
 
     protected function tearDown(): void
     {
+      $this->sessionRepository->deleteAll();
       $this->userRepository->deleteAll();
     }
 
@@ -102,7 +106,6 @@ namespace Daver\MVC\Controllers
 
     public function testLoginPostSuccess(): void
     {
-      self::markTestSkipped("Blom beres, beresin dong");
       $user = new User();
       $user->setId("test")
            ->setName("test")
@@ -114,7 +117,9 @@ namespace Daver\MVC\Controllers
       $_POST["password"] = "test";
 
       $this->controller->loginPost();
-      // TODO: Blom beres
+
+      self::expectOutputRegex("[Location: /]");
+      self::expectOutputRegex("[X-SESS-ID : ]");
     }
 
     public function testLoginPostValidationError(): void

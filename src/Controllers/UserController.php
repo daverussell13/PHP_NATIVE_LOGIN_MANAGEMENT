@@ -11,16 +11,23 @@ use Daver\MVC\Service\UserService;
 use Daver\MVC\Exception\ValidationException;
 use Daver\MVC\Config\Database;
 use Daver\MVC\Repository\UserRepository;
+use Daver\MVC\Service\SessionService;
+use Daver\MVC\Repository\SessionRepository;
 
 class UserController
 {
   private UserService $userService;
+  private SessionService $sessionService;
 
   public function __construct()
   {
     $connection = Database::getConnection();
+
     $userRepository = new UserRepository($connection);
     $this->userService = new UserService($userRepository);
+
+    $sessionRepository = new SessionRepository($connection);
+    $this->sessionService = new SessionService($sessionRepository, $userRepository);
   }
 
   public function register(): void
@@ -64,6 +71,7 @@ class UserController
 
     try {
       $response = $this->userService->login($request);
+      $this->sessionService->create($response->user->getId());
       View::redirect("/");
     }
     catch (ValidationException $exception)
@@ -73,6 +81,12 @@ class UserController
         "error" => $exception->errorMessage()
       ]);
     }
+  }
+
+  public function logout(): void
+  {
+    $this->sessionService->destroy();
+    View::redirect("/");
   }
 
   public function debugClear(): void

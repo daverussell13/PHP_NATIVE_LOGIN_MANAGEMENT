@@ -3,7 +3,6 @@
 namespace Daver\MVC\Repository;
 
 use Daver\MVC\Domain\Session;
-use Daver\MVC\Config\Database;
 
 class SessionRepository
 {

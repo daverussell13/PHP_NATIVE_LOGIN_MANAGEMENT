@@ -16,6 +16,7 @@ Router::add("GET", "/users/register", UserController::class, "register", []);
 Router::add("POST", "/users/register", UserController::class, "registerPost", []);
 Router::add("GET", "/users/login", UserController::class, "login", []);
 Router::add("POST", "/users/login", UserController::class, "loginPost", []);
+Router::add("GET", "/users/logout", UserController::class, "logout", []);
 
 // Debug
 Router::add("GET", "/debug/clear", UserController::class, "debugClear", []);
