@@ -11,10 +11,16 @@ namespace Daver\MVC\App
 namespace Daver\MVC\Controllers
 {
   use PHPUnit\Framework\TestCase;
-  use Daver\MVC\Repository\UserRepository;
-  use Daver\MVC\Repository\SessionRepository;
+  use Daver\MVC\Repository\{
+    UserRepository,
+    SessionRepository
+  };
   use Daver\MVC\Config\Database;
-  use Daver\MVC\Domain\User;
+  use Daver\MVC\Domain\{
+    User,
+    Session
+  };
+  use Daver\MVC\Service\SessionService;
 
   class UserControllerTest extends TestCase
   {
@@ -160,6 +166,31 @@ namespace Daver\MVC\Controllers
 
       $this->controller->loginPost();
       self::expectOutputRegex("[Error : Id or Password is wrong]");
+    }
+
+    public function testLogout(): void
+    {
+      $user = new User();
+      $user->setId("test")
+           ->setName("test")
+           ->setPassword(password_hash("test", PASSWORD_BCRYPT));
+
+      $this->userRepository->save($user);
+
+      $session = new Session();
+      $session->setId(uniqid(more_entropy: true))
+              ->setUserId("test");
+
+      $this->sessionRepository->save($session);
+
+      $_COOKIE[SessionService::$COOKIE_NAME] = $session->getId();
+      $this->controller->logout();
+
+      self::expectOutputRegex("[Location: /]");
+      self::expectOutputRegex("[X-SESS-ID : ]");
+
+      $getSession = $this->sessionRepository->findById($session->getId());
+      self::assertNull($getSession);
     }
   }
 };
