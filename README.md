@@ -1,7 +1,9 @@
 Login Management in PHP Native using Database Session management
 
-Design Pattern implemented in this project :
+Architectural pattern :
  - MVC
+
+Design Pattern implemented in this project :
  - Repository Pattern
  - Service Pattern
  - Domain Model Pattern
